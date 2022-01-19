@@ -5,7 +5,8 @@ from flask import json, request, jsonify
 from src.users.models import Users
 from app import app
 
-@app.route('/v1/users/add',methods = ['POST'])
+
+@app.route('/v1/users/add', methods=['POST'])
 def user_add():
     veri = request.get_json()
     user = Users()
@@ -13,13 +14,14 @@ def user_add():
     user.uuid = veri['uuid']
     user.name = veri['name']
     user.surname = veri['surname']
-    user.bio = veri['bio']
+    user.skill = veri['skill']
 
     user.add_user()
 
-    return jsonify("user created"),200
+    return jsonify("user created"), 200
 
-@app.route('/v1/users/get',methods = ['GET'])
+
+@app.route('/v1/users/get', methods=['GET'])
 def get_user():
     uuid = request.json.get('uuid')
     user = Users().get_user(uuid)
@@ -30,7 +32,7 @@ def get_user():
     return jsonUser
 
 
-@app.route('/v1/users/update',methods = ['PUT'])
+@app.route('/v1/users/update', methods=['PUT'])
 def update_user():
     veri = request.get_json()
     user = Users()
@@ -40,8 +42,15 @@ def update_user():
     user.uuid = veri['uuid']
     user.name = veri['name']
     user.surname = veri['surname']
-    user.bio = veri['bio']
+    user.skill = veri['skill']
     user.update_user(key)
-    return jsonify({'message':'user updated.'}),200
+    return jsonify({'message': 'user updated.'}), 200
 
 
+@app.route('/v1/users/delete', methods=['DELETE'])
+def delete_user():
+    veri = request.get_json()
+    user = Users().get_user(veri['uuid'])
+    user.delete_user()
+
+    return jsonify({'message': 'user deleted'}), 200
